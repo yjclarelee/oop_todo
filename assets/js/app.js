@@ -14,8 +14,8 @@ function render(){
     setTodayDate(getTodayDate());
     renderList();
     saveToDo();
-    // detectDateChange();
-    // detectCheckbox();
+    detectDateChange();
+    detectCheckbox();
 }
 
 /* setTodayDate()
@@ -121,7 +121,7 @@ function renderList(){
 }
 
 /* detectDateChanges()
- * render HTML according to date area change  */
+ * render HTML according to date area change */
 
 function detectDateChange(){
     const dateField = document.querySelector(".date-field");
@@ -130,6 +130,9 @@ function detectDateChange(){
     })
 }
 
+/* detectCheckbox()
+ * render HTML according to date area change */
+
 function detectCheckbox(){
     const unorderedList = document.querySelector('.list');
     unorderedList.addEventListener('click', function(event){
@@ -137,20 +140,16 @@ function detectCheckbox(){
             let key = getKey();
             let localObj = getLocalStorage(key);
             let id = event.path[0].id.split('-')[1];
+            let content = event.path[1].innerText;
+            
             if(event.target.checked){
-                let idx = localObj.todo.indexOf(event.path[1].innerText);
-                localObj.todo.splice(idx, 1);
-                localObj.completed.push(event.path[1].innerText);
-                
+                localObj.list[content] = 'completed';
                 let text = document.querySelector(`#todo-text-${id}`);
                 text.setAttribute('id', `completed-text-${id}`);
                 text.setAttribute("style", "text-decoration:line-through");
             }
             else{
-                let idx = localObj.completed.indexOf(event.path[1].innerText);
-                localObj.completed.splice(idx, 1);
-                localObj.todo.push(event.path[1].innerText);
-                
+                localObj.list[content] = 'todo';
                 let text = document.querySelector(`#completed-text-${id}`);
                 text.setAttribute('id', `todo-text-${id}`);
                 text.setAttribute("style", "text-decoration:none");
