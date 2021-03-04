@@ -1,9 +1,12 @@
 import {ToDo} from './todo.js';
 
+// localStorage.clear();
+
 function render(){
     // set today's date on the date input field
     setTodayDate(getTodayDate());
     saveInfo();
+
 }
 
 function getTodayDate(){
@@ -29,6 +32,24 @@ function setTodayDate(dateObj){
     dateField.value = `${dateObj.year}-${month}-${day}`;
 }
 
+function saveInfo(){
+    // get text input area : textField
+    const textField = document.querySelector('.text-field');
+    textField.addEventListener('keypress', function(e){
+        if(e.key == "Enter"){
+            // when a todo is entered
+            let date = getTodayDate();
+            let localKey = `${date.year}-${date.month}-${date.day}`
+            let localObj = JSON.parse(localStorage.getItem(localKey));
+            // if there is no object
+            if(!localObj) localObj = new ToDo("", "", date.year, date.month, date.day);
+            localObj.todo.push(textField.value);
+            // empty textField after input
+            textField.value = "";
+            localStorage.setItem(localKey, JSON.stringify(localObj));
+        }
+    })
+}
+
 render();
 
-// localStorage.clear();
