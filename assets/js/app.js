@@ -5,10 +5,10 @@ import {ToDo} from './todo.js';
 function render(){
     // set today's date on the date input field
     setTodayDate(getTodayDate());
-    renderHTML();
+    renderList();
     saveToDo();
     detectDateChange();
-
+    detectCheckbox();
 }
 
 /* setTodayDate()
@@ -73,7 +73,6 @@ function saveToDo(){
             // empty textField after input
             textField.value = "";
             setLocalStorage(key, localObj);
-            renderHTML();
         }
     })
 }
@@ -81,26 +80,57 @@ function saveToDo(){
 /* renderHTML()
  * render the HTML saved in localStorage */
 
+// function makeHTML(elem, type, idx){
+//     return `<li class="${type}" id="${type}-${idx}">
+//         <input type="checkbox" class="${type}-checkbox" id="${type}-checkbox-${idx}">
+//         <p class="${type}-text" id="${type}-text-${idx}">${elem}</p>
+//         <button type="button" class="${type}-button" id="${type}-button-${idx}"></button>
+//     </li>`;
+// }
+
+// function clearHTML(){
+//     const list = document.querySelector('ul');
+//     let localObj = getLocalStorage(getKey());
+//     if (localObj) list.innerHTML = '';
+// }
+
+// function renderHTML(){
+//     const list = document.querySelector('ul');
+//     let localObj = getLocalStorage(getKey());
+//     if(localObj){
+//         localObj.todo.forEach((elem, idx) => {
+//             if(elem.length) {
+//                 list.innerHTML += makeHTML(elem, 'todo', idx);
+//             }   
+//         })
+//     }  
+// }
+
 function makeHTML(elem, type, idx){
-    return `<li class="${type}" id="${type}-${idx}">
-        <input type="checkbox" class="${type}-checkbox" id="${type}-checkbox-${idx}">
-        <p class="${type}-text" id="${type}-text-${idx}">${elem}</p>
-        <button type="button" class="${type}-button" id="${type}-button-${idx}"></button>
-    </li>`;
+    const unorderedList = document.querySelector('ul');
+    const listElement = document.createElement('li');
+    listElement.innerHTML = 
+    `<input type="checkbox" class="${type}-checkbox" id="${type}-checkbox-${idx}">
+    <p class="${type}-text" id="${type}-text-${idx}">${elem}</p>
+    <button type="button" class="${type}-button" id="${type}-button-${idx}"></button>`;
+    unorderedList.appendChild(listElement);
 }
 
-function renderHTML(){
-    const list = document.querySelector('ul');
-    let localObj = getLocalStorage(getKey());
-    if(localObj){
-        list.innerHTML = '';
-        localObj.todo.forEach((elem, idx) => {
-            if(elem.length) {
-                list.innerHTML += makeHTML(elem, 'todo', idx);
-            }   
-        })
-    }  
+function removeHTML(){
+    const unorderedList = document.querySelector('ol');
+    if(unorderedList) unorderedList.remove();
 }
+
+function renderList(){
+    removeHTML();
+    const localObj = getLocalStorage(getKey());
+    if(localObj){
+        localObj.todo.forEach((elem, idx) => {
+            if(elem.length) makeHTML(elem, 'todo', idx);
+        });
+    }
+}
+
 
 /* detectDateChanges()
  * render HTML according to date area change  */
@@ -108,13 +138,19 @@ function renderHTML(){
 function detectDateChange(){
     const dateField = document.querySelector(".date-field");
     dateField.addEventListener('change', function(event){
-        renderHTML();
+        renderList();
     })
 }
 
-// function detectCheckbox(){
-//     const 
-// }
+function detectCheckbox(){
+    const unorderedList = document.querySelector('.list');
+    unorderedList.addEventListener('click', function(event){
+        if(event.target.type == 'checkbox'){
+            console.log(event);
+        }
+        console.log(event.target);
+    })
+}
 
 render();
 
