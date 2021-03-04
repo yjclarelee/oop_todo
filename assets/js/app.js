@@ -32,16 +32,26 @@ function setTodayDate(dateObj){
     dateField.value = `${dateObj.year}-${month}-${day}`;
 }
 
+function getChangedDate(){
+    const dateField = document.querySelector('.date-field');
+    date
+}
+
+
+function getLocalStorage(){
+    let date = getChangedDate();
+    let localKey = `${date.year}-${date.month}-${date.day}`
+    let localObj = JSON.parse(localStorage.getItem(localKey));
+    return localObj;
+}
+
 function saveInfo(){
     // get text input area : textField
     const textField = document.querySelector('.text-field');
     textField.addEventListener('keypress', function(e){
         if(e.key == "Enter"){
             // when a todo is entered
-            let date = getTodayDate();
-            let localKey = `${date.year}-${date.month}-${date.day}`
-            let localObj = JSON.parse(localStorage.getItem(localKey));
-            // if there is no object
+            let localObj = getLocalStorage();
             if(!localObj) localObj = new ToDo("", "", date.year, date.month, date.day);
             localObj.todo.push(textField.value);
             // empty textField after input
@@ -49,6 +59,15 @@ function saveInfo(){
             localStorage.setItem(localKey, JSON.stringify(localObj));
         }
     })
+}
+
+function showHTML(){
+    let list = document.querySelector('.list');
+    
+}
+
+function makeHTML(){
+
 }
 
 render();
