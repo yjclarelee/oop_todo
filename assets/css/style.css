@@ -47,3 +47,28 @@ input[type='text']:focus{
 input[type='text']:focus::placeholder{
     opacity: 0;
 }
+
+li{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    align-items: center;
+}
+
+li p{
+    font-size: 1.5rem;
+}
+
+input[type=checkbox]{
+    width: 25px;
+    height: 25px;
+}
+
+button{
+    width: 35px;
+    height: 35px;
+}
+
+
+
+
