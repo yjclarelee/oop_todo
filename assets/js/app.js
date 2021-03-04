@@ -70,6 +70,7 @@ function saveToDo(){
             let localObj = getLocalStorage(key);
             if(!localObj) localObj = makeNewObj(key);
             localObj.todo.push(textField.value);
+            makeHTML(textField.value, 'todo', setIdx());
             // empty textField after input
             textField.value = "";
             setLocalStorage(key, localObj);
@@ -77,34 +78,12 @@ function saveToDo(){
     })
 }
 
-/* renderHTML()
+/* renderList()
  * render the HTML saved in localStorage */
 
-// function makeHTML(elem, type, idx){
-//     return `<li class="${type}" id="${type}-${idx}">
-//         <input type="checkbox" class="${type}-checkbox" id="${type}-checkbox-${idx}">
-//         <p class="${type}-text" id="${type}-text-${idx}">${elem}</p>
-//         <button type="button" class="${type}-button" id="${type}-button-${idx}"></button>
-//     </li>`;
-// }
-
-// function clearHTML(){
-//     const list = document.querySelector('ul');
-//     let localObj = getLocalStorage(getKey());
-//     if (localObj) list.innerHTML = '';
-// }
-
-// function renderHTML(){
-//     const list = document.querySelector('ul');
-//     let localObj = getLocalStorage(getKey());
-//     if(localObj){
-//         localObj.todo.forEach((elem, idx) => {
-//             if(elem.length) {
-//                 list.innerHTML += makeHTML(elem, 'todo', idx);
-//             }   
-//         })
-//     }  
-// }
+function setIdx(){
+    return 1;
+}
 
 function makeHTML(elem, type, idx){
     const unorderedList = document.querySelector('ul');
@@ -117,8 +96,10 @@ function makeHTML(elem, type, idx){
 }
 
 function removeHTML(){
-    const unorderedList = document.querySelector('ol');
-    if(unorderedList) unorderedList.remove();
+    const elements = document.querySelectorAll('li');
+    if(elements) {
+        elements.forEach((element) => element.remove());
+    }
 }
 
 function renderList(){
@@ -130,7 +111,6 @@ function renderList(){
         });
     }
 }
-
 
 /* detectDateChanges()
  * render HTML according to date area change  */
