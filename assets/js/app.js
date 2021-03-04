@@ -5,9 +5,12 @@ import {ToDo} from './todo.js';
 function render(){
     // set today's date on the date input field
     setTodayDate(getTodayDate());
-    saveInfo();
+    saveToDo();
 
 }
+
+/* setTodayDate()
+ * Set the current date */
 
 function getTodayDate(){
     // get today's date and return it as an object
@@ -32,6 +35,9 @@ function setTodayDate(dateObj){
     dateField.value = `${dateObj.year}-${month}-${day}`;
 }
 
+/* saveToDo()
+ * save the entered todo in localStorage */
+
 function getKey(){
     const dateField = document.querySelector('.date-field');
     return dateField.value;
@@ -52,7 +58,7 @@ function makeNewObj(key){
     return newObj;
 }
 
-function saveInfo(){
+function saveToDo(){
     // get text input area : textField
     const textField = document.querySelector('.text-field');
     textField.addEventListener('keypress', function(e){
@@ -60,23 +66,45 @@ function saveInfo(){
             // when a todo is entered
             let key = getKey();
             let localObj = getLocalStorage(key);
-            // if(!localObj) localObj = new ToDo("", "", date.year, date.month, date.day);
             if(!localObj) localObj = makeNewObj(key);
             localObj.todo.push(textField.value);
             // empty textField after input
             textField.value = "";
             setLocalStorage(key, localObj);
-            console.log(localStorage);
+            renderHTML();
         }
     })
 }
 
-function showHTML(){
-    let list = document.querySelector('.list');
-    
+/* renderHTML()
+ * render the HTML saved in localStorage */
+
+function makeHTML(elem, type, idx){
+    return `<li class="${type}" id="${type}-${idx}">
+        <input type="checkbox" class="${type}-checkbox" id="${type}-checkbox-${idx}">
+        <p class="${type}-text" id="${type}-text-${idx}">${elem}</p>
+        <button type="button" class="${type}-button" id="${type}-button-${idx}"></button>
+    </li>`;
 }
 
-function makeHTML(){
+function renderHTML(){
+    let list = document.querySelector('ul');
+    let localObj = getLocalStorage(getKey());
+    list.innerHTML = '';
+    localObj.todo.forEach((elem, idx) => {
+        if(elem.length) {
+            list.innerHTML += makeHTML(elem, 'todo', idx);
+        }   
+    })
+}
+
+
+
+function detectDateChange(){
+
+}
+
+function detectCheckbox(){
 
 }
 
