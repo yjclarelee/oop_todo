@@ -11,3 +11,5 @@ why does this not work?
 
 addEventListeners
 -change date-field: render
+
+new setting: the key is the date(date=fields' value)

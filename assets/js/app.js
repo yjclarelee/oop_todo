@@ -32,17 +32,28 @@ function setTodayDate(dateObj){
     dateField.value = `${dateObj.year}-${month}-${day}`;
 }
 
-function getChangedDate(){
+function getKey(){
     const dateField = document.querySelector('.date-field');
-    date
+    console.log('here: ', dateField.value);
+    return dateField.value;
 }
 
-
 function getLocalStorage(){
-    let date = getChangedDate();
-    let localKey = `${date.year}-${date.month}-${date.day}`
-    let localObj = JSON.parse(localStorage.getItem(localKey));
+    let key = getKey();
+    let localObj = JSON.parse(localStorage.getItem(key));
     return localObj;
+}
+
+function setLocalStorage(obj){
+    let key = getKey();
+    localStorage.setItem(key, JSON.stringify(obj));
+}
+
+function makeNewObj(){
+    let date = getKey().split("-");
+    let {year, month, day} = date;
+    let newObj = new ToDo("", "", year, month, day);
+    return newObj;
 }
 
 function saveInfo(){
@@ -52,11 +63,12 @@ function saveInfo(){
         if(e.key == "Enter"){
             // when a todo is entered
             let localObj = getLocalStorage();
-            if(!localObj) localObj = new ToDo("", "", date.year, date.month, date.day);
+            // if(!localObj) localObj = new ToDo("", "", date.year, date.month, date.day);
+            if(!localObj) localObj = makeNewObj();
             localObj.todo.push(textField.value);
             // empty textField after input
             textField.value = "";
-            localStorage.setItem(localKey, JSON.stringify(localObj));
+            setLocalStorage(localObj);
         }
     })
 }
@@ -71,4 +83,5 @@ function makeHTML(){
 }
 
 render();
+
 
