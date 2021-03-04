@@ -2,6 +2,13 @@ import {ToDo} from './todo.js';
 
 // localStorage.clear();
 
+const idNumArr = [0];
+
+// generates non-duplicate number ids
+function generateId(){
+    return idNumArr[0]++;
+}
+
 function render(){
     // set today's date on the date input field
     setTodayDate(getTodayDate());
@@ -70,7 +77,7 @@ function saveToDo(){
             let localObj = getLocalStorage(key);
             if(!localObj) localObj = makeNewObj(key);
             localObj.todo.push(textField.value);
-            makeHTML(textField.value, 'todo', setIdx());
+            makeHTML(textField.value, 'todo', generateId());
             // empty textField after input
             textField.value = "";
             setLocalStorage(key, localObj);
@@ -81,17 +88,16 @@ function saveToDo(){
 /* renderList()
  * render the HTML saved in localStorage */
 
-function setIdx(){
-    return 1;
-}
-
 function makeHTML(elem, type, idx){
     const unorderedList = document.querySelector('ul');
     const listElement = document.createElement('li');
+    const checked = type == 'todo' ? '' : 'checked';
+    const strikethrough = type == 'todo' ? '' : 'style=\"text-decoration:line-through;\"'
     listElement.innerHTML = 
-    `<input type="checkbox" class="${type}-checkbox" id="${type}-checkbox-${idx}">
-    <p class="${type}-text" id="${type}-text-${idx}">${elem}</p>
-    <button type="button" class="${type}-button" id="${type}-button-${idx}"></button>`;
+    `<input type="checkbox" class="${type}-checkbox" id="checkbox-${idx}" ${checked}>
+    <p class="${type}-text" id="${type}-text-${idx}" ${strikethrough}>${elem}</p>
+    <button type="button" class="${type}-button"></button>`;
+    
     unorderedList.appendChild(listElement);
 }
 
@@ -106,8 +112,11 @@ function renderList(){
     removeHTML();
     const localObj = getLocalStorage(getKey());
     if(localObj){
-        localObj.todo.forEach((elem, idx) => {
-            if(elem.length) makeHTML(elem, 'todo', idx);
+        localObj.todo.forEach((elem) => {
+            if(elem.length) makeHTML(elem, 'todo', generateId());
+        });
+        localObj.completed.forEach((elem) => {
+            if(elem.length) makeHTML(elem, 'completed', generateId());
         });
     }
 }
@@ -126,9 +135,32 @@ function detectCheckbox(){
     const unorderedList = document.querySelector('.list');
     unorderedList.addEventListener('click', function(event){
         if(event.target.type == 'checkbox'){
-            console.log(event);
+            let key = getKey();
+            let localObj = getLocalStorage(key);
+            if(event.target.checked){
+                let idx = localObj.todo.indexOf(event.path[1].innerText);
+                localObj.todo.splice(idx, 1);
+                localObj.completed.push(event.path[1].innerText);
+                setLocalStorage(key, localObj);
+
+                let id = event.path[0].id.split('-')[1];
+                let text = document.querySelector(`#todo-text-${id}`);
+                text.setAttribute('id', `completed-text-${id}`);
+                text.setAttribute("style", "text-decoration:line-through");
+            }
+            else{
+                let idx = localObj.completed.indexOf(event.path[1].innerText);
+                localObj.completed.splice(idx, 1);
+                localObj.todo.push(event.path[1].innerText);
+                setLocalStorage(key, localObj);
+
+                let id = event.path[0].id.split('-')[1];
+                let text = document.querySelector(`#completed-text-${id}`);
+                text.setAttribute('id', `todo-text-${id}`);
+                text.setAttribute("style", "text-decoration:none");
+            }
+
         }
-        console.log(event.target);
     })
 }
 
