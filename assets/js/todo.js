@@ -1,3 +1,5 @@
+export {ToDo};
+
 class ToDo{
     constructor(todo, completed, year, month, day){
         this.todo = [todo];
