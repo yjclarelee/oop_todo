@@ -44,10 +44,6 @@ input[type='text']:focus{
     border-bottom: 2px solid black;
 }
 
-input[type='text']:focus::placeholder{
-    opacity: 0;
-}
-
 li{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
