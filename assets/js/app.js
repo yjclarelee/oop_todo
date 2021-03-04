@@ -34,23 +34,19 @@ function setTodayDate(dateObj){
 
 function getKey(){
     const dateField = document.querySelector('.date-field');
-    console.log('here: ', dateField.value);
     return dateField.value;
 }
 
-function getLocalStorage(){
-    let key = getKey();
-    let localObj = JSON.parse(localStorage.getItem(key));
-    return localObj;
+function getLocalStorage(key){
+    return JSON.parse(localStorage.getItem(key));
 }
 
-function setLocalStorage(obj){
-    let key = getKey();
+function setLocalStorage(key, obj){
     localStorage.setItem(key, JSON.stringify(obj));
 }
 
-function makeNewObj(){
-    let date = getKey().split("-");
+function makeNewObj(key){
+    let date = key.split("-");
     let {year, month, day} = date;
     let newObj = new ToDo("", "", year, month, day);
     return newObj;
@@ -62,13 +58,15 @@ function saveInfo(){
     textField.addEventListener('keypress', function(e){
         if(e.key == "Enter"){
             // when a todo is entered
-            let localObj = getLocalStorage();
+            let key = getKey();
+            let localObj = getLocalStorage(key);
             // if(!localObj) localObj = new ToDo("", "", date.year, date.month, date.day);
-            if(!localObj) localObj = makeNewObj();
+            if(!localObj) localObj = makeNewObj(key);
             localObj.todo.push(textField.value);
             // empty textField after input
             textField.value = "";
-            setLocalStorage(localObj);
+            setLocalStorage(key, localObj);
+            console.log(localStorage);
         }
     })
 }
