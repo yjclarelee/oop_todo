@@ -5,7 +5,9 @@ import {ToDo} from './todo.js';
 function render(){
     // set today's date on the date input field
     setTodayDate(getTodayDate());
+    renderHTML();
     saveToDo();
+    detectDateChange();
 
 }
 
@@ -88,25 +90,31 @@ function makeHTML(elem, type, idx){
 }
 
 function renderHTML(){
-    let list = document.querySelector('ul');
+    const list = document.querySelector('ul');
     let localObj = getLocalStorage(getKey());
-    list.innerHTML = '';
-    localObj.todo.forEach((elem, idx) => {
-        if(elem.length) {
-            list.innerHTML += makeHTML(elem, 'todo', idx);
-        }   
+    if(localObj){
+        list.innerHTML = '';
+        localObj.todo.forEach((elem, idx) => {
+            if(elem.length) {
+                list.innerHTML += makeHTML(elem, 'todo', idx);
+            }   
+        })
+    }  
+}
+
+/* detectDateChanges()
+ * render HTML according to date area change  */
+
+function detectDateChange(){
+    const dateField = document.querySelector(".date-field");
+    dateField.addEventListener('change', function(event){
+        renderHTML();
     })
 }
 
-
-
-function detectDateChange(){
-
-}
-
-function detectCheckbox(){
-
-}
+// function detectCheckbox(){
+//     const 
+// }
 
 render();
 
