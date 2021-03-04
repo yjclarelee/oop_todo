@@ -14,8 +14,8 @@ function render(){
     setTodayDate(getTodayDate());
     renderList();
     saveToDo();
-    detectDateChange();
-    detectCheckbox();
+    // detectDateChange();
+    // detectCheckbox();
 }
 
 /* setTodayDate()
@@ -63,7 +63,7 @@ function setLocalStorage(key, obj){
 function makeNewObj(key){
     let date = key.split("-");
     let {year, month, day} = date;
-    let newObj = new ToDo("", "", year, month, day);
+    let newObj = new ToDo(new Map(), year, month, day);
     return newObj;
 }
 
@@ -76,7 +76,7 @@ function saveToDo(){
             let key = getKey();
             let localObj = getLocalStorage(key);
             if(!localObj) localObj = makeNewObj(key);
-            localObj.todo.push(textField.value);
+            localObj.list[textField.value] = 'todo';
             makeHTML(textField.value, 'todo', generateId());
             // empty textField after input
             textField.value = "";
@@ -112,12 +112,11 @@ function renderList(){
     removeHTML();
     const localObj = getLocalStorage(getKey());
     if(localObj){
-        localObj.todo.forEach((elem) => {
-            if(elem.length) makeHTML(elem, 'todo', generateId());
-        });
-        localObj.completed.forEach((elem) => {
-            if(elem.length) makeHTML(elem, 'completed', generateId());
-        });
+        let map = Object.entries(localObj.list);
+        for(let [key, value] of map){
+            if(value == 'todo') makeHTML(key, 'todo', generateId());
+            else makeHTML(key, 'completed', generateId());
+        }
     }
 }
 
@@ -137,13 +136,12 @@ function detectCheckbox(){
         if(event.target.type == 'checkbox'){
             let key = getKey();
             let localObj = getLocalStorage(key);
+            let id = event.path[0].id.split('-')[1];
             if(event.target.checked){
                 let idx = localObj.todo.indexOf(event.path[1].innerText);
                 localObj.todo.splice(idx, 1);
                 localObj.completed.push(event.path[1].innerText);
-                setLocalStorage(key, localObj);
-
-                let id = event.path[0].id.split('-')[1];
+                
                 let text = document.querySelector(`#todo-text-${id}`);
                 text.setAttribute('id', `completed-text-${id}`);
                 text.setAttribute("style", "text-decoration:line-through");
@@ -152,14 +150,12 @@ function detectCheckbox(){
                 let idx = localObj.completed.indexOf(event.path[1].innerText);
                 localObj.completed.splice(idx, 1);
                 localObj.todo.push(event.path[1].innerText);
-                setLocalStorage(key, localObj);
-
-                let id = event.path[0].id.split('-')[1];
+                
                 let text = document.querySelector(`#completed-text-${id}`);
                 text.setAttribute('id', `todo-text-${id}`);
                 text.setAttribute("style", "text-decoration:none");
             }
-
+            setLocalStorage(key, localObj);
         }
     })
 }
