@@ -62,8 +62,8 @@ input[type=checkbox]{
 }
 
 button{
-    width: 35px;
-    height: 35px;
+    width: 28px;
+    height: 28px;
     background: url('../img/x.svg') no-repeat center center;
     background-size: cover;
     border: none;
