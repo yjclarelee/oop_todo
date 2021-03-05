@@ -110,6 +110,7 @@ function makeHTML(elem, type, idx){
     `<input type="checkbox" class="${type}-checkbox" id="checkbox-${idx}" ${checked}>
     <p class="${type}-text" id="${type}-text-${idx}" ${strikethrough}>${elem}</p>
     <button type="button" class="${type}-button"></button>`;
+    listElement.id = `li-${idx}`;
     unorderedList.appendChild(listElement);
 }
 
@@ -154,6 +155,7 @@ function detectListItemChange(){
     listDiv.addEventListener('click', function(event){
         // act according to checkboxChange
         checkboxChange(event);
+        deleteButtonClick(event);
     })
 }
 
@@ -190,6 +192,8 @@ function checkboxChange(event){
         setLocalStorage(key, localObj);
     }
 }
+
+
 
 render();
 
