@@ -32,11 +32,12 @@ input[type='date']{
 }
 
 input[type='text']{
-    width: 550px;
+    /* width: 550px; */
+    width: 120%;
     border: none;
     border-bottom: 1px solid black;
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.7rem;
 }
 
 input[type='text']:focus{
@@ -52,7 +53,7 @@ li{
 }
 
 li p{
-    font-size: 1.5rem;
+    font-size: 1.7rem;
 }
 
 input[type=checkbox]{
@@ -63,6 +64,13 @@ input[type=checkbox]{
 button{
     width: 35px;
     height: 35px;
+    background: url('../img/x.svg') no-repeat center center;
+    background-size: cover;
+    border: none;
+}
+
+button:active{
+    outline: none;
 }
 
 
