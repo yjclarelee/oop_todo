@@ -109,7 +109,7 @@ function makeHTML(elem, type, idx){
     listElement.innerHTML = 
     `<input type="checkbox" class="${type}-checkbox" id="checkbox-${idx}" ${checked}>
     <p class="${type}-text" id="${type}-text-${idx}" ${strikethrough}>${elem}</p>
-    <button type="button" class="${type}-button"></button>`;
+    <button type="button" class="${type}-button" id="button-${idx}"></button>`;
     listElement.id = `li-${idx}`;
     unorderedList.appendChild(listElement);
 }
@@ -193,7 +193,13 @@ function checkboxChange(event){
     }
 }
 
-
+function deleteButtonClick(event){
+    if(event.target.type == 'button'){
+        let key = getKey();
+        let localObj = getLocalStorage(key);
+        console.log(event);
+    }
+}
 
 render();
 
