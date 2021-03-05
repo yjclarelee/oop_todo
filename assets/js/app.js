@@ -115,7 +115,7 @@ function makeHTML(elem, type, idx){
 }
 
 // remove HTML for initialization purposes
-function removeHTML(){
+function removeHTMLAll(){
     const elements = document.querySelectorAll('li');
     if(elements) {
         elements.forEach((element) => element.remove());
@@ -124,7 +124,7 @@ function removeHTML(){
 
 // clear out HTML and render list items
 function renderList(){
-    removeHTML();
+    removeHTMLAll();
     const localObj = getLocalStorage(getKey());
     if(localObj){
         let map = Object.entries(localObj.list);
@@ -160,7 +160,7 @@ function detectListItemChange(){
         let id = event.path[0].id.split('-')[1];
         // get text regarding event item
         let content = event.path[1].innerText;
-        
+
         // act according to checkboxChange
         checkboxChange(event, key, localObj, id, content);
         deleteButtonClick(event, key, localObj, id, content);
@@ -193,14 +193,16 @@ function checkboxChange(event, key, localObj, id, content){
     }
 }
 
-function deleteButtonClick(event){
+// remove item when button is clicked
+function deleteButtonClick(event, key, localObj, id, content){
     if(event.target.type == 'button'){
-        let key = getKey();
-        let localObj = getLocalStorage(key);
-        console.log(event);
-        let id = event.path[0].id.split('-')[1];
-        let content = event.path[1].innerText;
-        console.log(id);
+        // remove item from localObj
+        delete localObj.list[content];
+        // setLocalStorage
+        setLocalStorage(key, localObj);
+        // remove from HTML
+        const listElement = document.querySelector(`#li-${id}`);
+        listElement.remove();
     }
 }
 
