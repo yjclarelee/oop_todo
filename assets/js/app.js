@@ -18,8 +18,8 @@ function render(){
     saveToDo();
     // render the list when there is date change
     detectDateChange();
-    // set data and render list according to the checkbox
-    detectCheckbox();
+    // set HTML according to checkbox change and deletion
+    detectListItemChange();
 }
 
 /* setTodayDate()
@@ -101,20 +101,15 @@ function saveToDo(){
 
  // make HTML for a list item
 function makeHTML(elem, type, idx){
-    // choose the unordered list
     const unorderedList = document.querySelector('ul');
-    // create a list element
     const listElement = document.createElement('li');
-    // if the type is completed, make it checked
     const checked = type == 'todo' ? '' : 'checked';
-    // if the type is completed, make the text strikethrough
     const strikethrough = type == 'todo' ? '' : 'style=\"text-decoration:line-through;\"'
     // add a checkbox, text and button
     listElement.innerHTML = 
     `<input type="checkbox" class="${type}-checkbox" id="checkbox-${idx}" ${checked}>
     <p class="${type}-text" id="${type}-text-${idx}" ${strikethrough}>${elem}</p>
     <button type="button" class="${type}-button"></button>`;
-    // append html to the list element
     unorderedList.appendChild(listElement);
 }
 
