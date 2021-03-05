@@ -153,24 +153,24 @@ function detectListItemChange(){
     const listDiv = document.querySelector('.list');
     // listen to events from the whole div
     listDiv.addEventListener('click', function(event){
+        // get key to access localStorage
+        let key = getKey();
+        let localObj = getLocalStorage(key);
+        // get id of event item
+        let id = event.path[0].id.split('-')[1];
+        // get text regarding event item
+        let content = event.path[1].innerText;
+        
         // act according to checkboxChange
-        checkboxChange(event);
-        deleteButtonClick(event);
+        checkboxChange(event, key, localObj, id, content);
+        deleteButtonClick(event, key, localObj, id, content);
     })
 }
 
 // switch between todo and completed according to checkbox click
-function checkboxChange(event){
+function checkboxChange(event, key, localObj, id, content){
     // if the checkbox is clicked
     if(event.target.type == 'checkbox'){
-        // get key to access localStorage
-        let key = getKey();
-        let localObj = getLocalStorage(key);
-        // get id of checkbox
-        let id = event.path[0].id.split('-')[1];
-        // get text regarding checkbox
-        let content = event.path[1].innerText;
-
         // if the checkbox is clicked to be checked
         if(event.target.checked){
             // set the item as completed
@@ -198,6 +198,9 @@ function deleteButtonClick(event){
         let key = getKey();
         let localObj = getLocalStorage(key);
         console.log(event);
+        let id = event.path[0].id.split('-')[1];
+        let content = event.path[1].innerText;
+        console.log(id);
     }
 }
 
