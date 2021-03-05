@@ -12,17 +12,21 @@ function generateId(){
 function render(){
     // set today's date on the date input field
     setTodayDate(getTodayDate());
+    // initially render the list
     renderList();
+    // save the todo when it is entered
     saveToDo();
+    // render the list when there is date change
     detectDateChange();
+    // set data and render list according to the checkbox
     detectCheckbox();
 }
 
 /* setTodayDate()
  * Set the current date */
 
+ // get today's date and return it as an object
 function getTodayDate(){
-    // get today's date and return it as an object
     const today = new Date();
     let year = today.getFullYear();
     let month = today.getMonth()+1;
@@ -30,14 +34,14 @@ function getTodayDate(){
     return {year, month, day};
 }
 
+// pad one zero before the chosen month or date
 function padZero(num){
-    // pad one zero before the chosen month or date
     if(num.toString().length == 1) return '0' + num;
     else return num;
 }
 
+// set today's date on the date input field
 function setTodayDate(dateObj){
-    // set today's date on the date input field
     const dateField = document.querySelector('.date-field');
     let month = padZero(dateObj.month);
     let day = padZero(dateObj.day);
@@ -47,19 +51,23 @@ function setTodayDate(dateObj){
 /* saveToDo()
  * save the entered todo in localStorage */
 
+// get the key of localStorage(aka the changed date)
 function getKey(){
     const dateField = document.querySelector('.date-field');
     return dateField.value;
 }
 
+// get the localStorage object
 function getLocalStorage(key){
     return JSON.parse(localStorage.getItem(key));
 }
 
+// set the localStorage object
 function setLocalStorage(key, obj){
     localStorage.setItem(key, JSON.stringify(obj));
 }
 
+// make a new object and return it
 function makeNewObj(key){
     let date = key.split("-");
     let {year, month, day} = date;
@@ -67,19 +75,22 @@ function makeNewObj(key){
     return newObj;
 }
 
+// save todo when entered and display it
 function saveToDo(){
-    // get text input area : textField
     const textField = document.querySelector('.text-field');
     textField.addEventListener('keypress', function(e){
         if(e.key == "Enter"){
-            // when a todo is entered
+            // get key to access localStorage
             let key = getKey();
             let localObj = getLocalStorage(key);
             if(!localObj) localObj = makeNewObj(key);
+            // add todo to local object
             localObj.list[textField.value] = 'todo';
+            // append html
             makeHTML(textField.value, 'todo', generateId());
             // empty textField after input
             textField.value = "";
+            // save to localStorage
             setLocalStorage(key, localObj);
         }
     })
@@ -88,19 +99,26 @@ function saveToDo(){
 /* renderList()
  * render the HTML saved in localStorage */
 
+ // make HTML for a list item
 function makeHTML(elem, type, idx){
+    // choose the unordered list
     const unorderedList = document.querySelector('ul');
+    // create a list element
     const listElement = document.createElement('li');
+    // if the type is completed, make it checked
     const checked = type == 'todo' ? '' : 'checked';
+    // if the type is completed, make the text strikethrough
     const strikethrough = type == 'todo' ? '' : 'style=\"text-decoration:line-through;\"'
+    // add a checkbox, text and button
     listElement.innerHTML = 
     `<input type="checkbox" class="${type}-checkbox" id="checkbox-${idx}" ${checked}>
     <p class="${type}-text" id="${type}-text-${idx}" ${strikethrough}>${elem}</p>
     <button type="button" class="${type}-button"></button>`;
-    
+    // append html to the list element
     unorderedList.appendChild(listElement);
 }
 
+// remove HTML for initialization purposes
 function removeHTML(){
     const elements = document.querySelectorAll('li');
     if(elements) {
@@ -108,6 +126,7 @@ function removeHTML(){
     }
 }
 
+// clear out HTML and render list items
 function renderList(){
     removeHTML();
     const localObj = getLocalStorage(getKey());
@@ -133,30 +152,48 @@ function detectDateChange(){
 /* detectCheckbox()
  * render HTML according to date area change */
 
-function detectCheckbox(){
-    const unorderedList = document.querySelector('.list');
-    unorderedList.addEventListener('click', function(event){
-        if(event.target.type == 'checkbox'){
-            let key = getKey();
-            let localObj = getLocalStorage(key);
-            let id = event.path[0].id.split('-')[1];
-            let content = event.path[1].innerText;
-            
-            if(event.target.checked){
-                localObj.list[content] = 'completed';
-                let text = document.querySelector(`#todo-text-${id}`);
-                text.setAttribute('id', `completed-text-${id}`);
-                text.setAttribute("style", "text-decoration:line-through");
-            }
-            else{
-                localObj.list[content] = 'todo';
-                let text = document.querySelector(`#completed-text-${id}`);
-                text.setAttribute('id', `todo-text-${id}`);
-                text.setAttribute("style", "text-decoration:none");
-            }
-            setLocalStorage(key, localObj);
-        }
+function detectListItemChange(){
+    // event delegation from the div
+    const listDiv = document.querySelector('.list');
+    // listen to events from the whole div
+    listDiv.addEventListener('click', function(event){
+        // act according to checkboxChange
+        checkboxChange(event);
     })
+}
+
+// switch between todo and completed according to checkbox click
+function checkboxChange(event){
+    // if the checkbox is clicked
+    if(event.target.type == 'checkbox'){
+        // get key to access localStorage
+        let key = getKey();
+        let localObj = getLocalStorage(key);
+        // get id of checkbox
+        let id = event.path[0].id.split('-')[1];
+        // get text regarding checkbox
+        let content = event.path[1].innerText;
+
+        // if the checkbox is clicked to be checked
+        if(event.target.checked){
+            // set the item as completed
+            localObj.list[content] = 'completed';
+            // set text id as completed and style as strikethrough
+            let text = document.querySelector(`#todo-text-${id}`);
+            text.setAttribute('id', `completed-text-${id}`);
+            text.setAttribute("style", "text-decoration:line-through");
+        }
+        // if the checkbox is clicked to be unchecked
+        else{
+            // set the item to todo
+            localObj.list[content] = 'todo';
+            // set the text id as todo and style as none
+            let text = document.querySelector(`#completed-text-${id}`);
+            text.setAttribute('id', `todo-text-${id}`);
+            text.setAttribute("style", "text-decoration:none");
+        }
+        setLocalStorage(key, localObj);
+    }
 }
 
 render();
