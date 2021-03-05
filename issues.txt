@@ -13,3 +13,31 @@ addEventListeners
 -change date-field: render
 
 new setting: the key is the date(date=fields' value)
+
+// function makeHTML(elem, type, idx){
+//     return `<li class="${type}" id="${type}-${idx}">
+//         <input type="checkbox" class="${type}-checkbox" id="${type}-checkbox-${idx}">
+//         <p class="${type}-text" id="${type}-text-${idx}">${elem}</p>
+//         <button type="button" class="${type}-button" id="${type}-button-${idx}"></button>
+//     </li>`;
+// }
+
+// function clearHTML(){
+//     const list = document.querySelector('ul');
+//     let localObj = getLocalStorage(getKey());
+//     if (localObj) list.innerHTML = '';
+// }
+
+// function renderHTML(){
+//     const list = document.querySelector('ul');
+//     let localObj = getLocalStorage(getKey());
+//     if(localObj){
+//         localObj.todo.forEach((elem, idx) => {
+//             if(elem.length) {
+//                 list.innerHTML += makeHTML(elem, 'todo', idx);
+//             }   
+//         })
+//     }  
+// }
+
+checkbox and lable of can be a thing to be set(better use of html)
