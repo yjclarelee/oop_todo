@@ -8,8 +8,8 @@
 - Remove a todo
 - Set date
 
-# Skill stack
+## Skill stack
 HTML, CSS, Vanilla JS
 
-# Webpage
+## Webpage
 [URL](https://yjclarelee.github.io/oop_todo/)
