@@ -1,5 +1,6 @@
 # Date ToDo list
 - Added open graph explanations
+- Date is automatically set according to the current date
 
 ## Functionality
 - Write a todo
@@ -9,3 +10,6 @@
 
 # Skill stack
 HTML, CSS, Vanilla JS
+
+# Webpage
+[URL](https://yjclarelee.github.io/oop_todo/)
