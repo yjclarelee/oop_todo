@@ -10,15 +10,10 @@ function generateId(){
 }
 
 function render(){
-    // set today's date on the date input field
     setTodayDate(getTodayDate());
-    // initially render the list
     renderList();
-    // save the todo when it is entered
     saveToDo();
-    // render the list when there is date change
     detectDateChange();
-    // set HTML according to checkbox change and deletion
     detectListItemChange();
 }
 
