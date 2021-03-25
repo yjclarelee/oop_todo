@@ -18,8 +18,8 @@ export default class todoDate{
 
     // pad one zero before the chosen month or date
     padZero(num){
-    if(num.toString().length == 1) return '0' + num;
-    else return num;
-}
+        if(num.toString().length == 1) return '0' + num;
+        else return num;
+    }
 
 }
