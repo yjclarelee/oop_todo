@@ -1,46 +1,18 @@
 import {ToDo} from './todo.js';
+import MakeId from './makeId.js';
+import todoDate from './todoDate.js';
 
 // localStorage.clear();
 
-const idNumArr = [0];
-
-// generates non-duplicate number ids
-function generateId(){
-    return idNumArr[0]++;
-}
+const id = new MakeId();
+const date = new todoDate();
 
 function render(){
-    setTodayDate(getTodayDate());
+    date.setTodayDate(date.getTodayDate());
     renderList();
     saveToDo();
     detectDateChange();
     detectListItemChange();
-}
-
-/* setTodayDate()
- * Set the current date */
-
- // get today's date and return it as an object
-function getTodayDate(){
-    const today = new Date();
-    let year = today.getFullYear();
-    let month = today.getMonth()+1;
-    let day = today.getDate();
-    return {year, month, day};
-}
-
-// pad one zero before the chosen month or date
-function padZero(num){
-    if(num.toString().length == 1) return '0' + num;
-    else return num;
-}
-
-// set today's date on the date input field
-function setTodayDate(dateObj){
-    const dateField = document.querySelector('.date-field');
-    let month = padZero(dateObj.month);
-    let day = padZero(dateObj.day);
-    dateField.value = `${dateObj.year}-${month}-${day}`;
 }
 
 /* saveToDo()
@@ -82,7 +54,7 @@ function saveToDo(){
             // add todo to local object
             localObj.list[textField.value] = 'todo';
             // append html
-            makeHTML(textField.value, 'todo', generateId());
+            makeHTML(textField.value, 'todo', id.generateId());
             // empty textField after input
             textField.value = "";
             // save to localStorage
@@ -124,8 +96,8 @@ function renderList(){
     if(localObj){
         let map = Object.entries(localObj.list);
         for(let [key, value] of map){
-            if(value == 'todo') makeHTML(key, 'todo', generateId());
-            else makeHTML(key, 'completed', generateId());
+            if(value == 'todo') makeHTML(key, 'todo', id.generateId());
+            else makeHTML(key, 'completed', id.generateId());
         }
     }
 }
